@@ -1,6 +1,8 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
+using namespace sf;
+
 // Implement the header file as specified in the UML diagram
 class ComplexPlane
 {

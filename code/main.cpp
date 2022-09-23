@@ -1,7 +1,7 @@
 // Include important C++ libraries/User defined header files here
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include <complex>
+#include <complex.h>
 #include "ComplexPlane.h"
 
 // Make code easier to type with "using namespace"
@@ -12,12 +12,15 @@ using namespace std;
 int main()
 {
 	// Get desktop res and calculate aspect ratio (height/width)
-	int windowWidth = VideoMode::getDesktopMode().width,
-		windowHeight = VideoMode::getDesktopMode().height,
-		aspectRatio = windowWidth/windowHeight;
+	Vector2f resolution;
+
+	resolution.x = VideoMode::getDesktopMode().width;
+	resolution.y = VideoMode::getDesktopMode().height;
+
+	float aspectRatio = resolution.x/resolution.y;
 
 	// Construct the window
-	VideoMode vm(windowWidth, windowHeight);
+	VideoMode vm(resolution.x, resolution.y);
 	RenderWindow window(vm, "Mandelbrot", Style::Fullscreen);
 
 	// Construct an object of type ComplexPlane(this is after we do the ComplexPlane file)
