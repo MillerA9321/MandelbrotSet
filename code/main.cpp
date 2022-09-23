@@ -26,6 +26,11 @@ int main()
 	// Construct an object of type ComplexPlane(this is after we do the ComplexPlane file)
 
 	// Construct Font and Text objects
+	Font font;
+	if (!font.loadFromFile("font/KOMIKAP_.ttf"))
+	{
+		cout << "Error: Font File" << endl;
+	}
 
 	// Construct a VertexArray, this is used for drawing each pixels color
 
@@ -56,7 +61,10 @@ int main()
 		// If the state is CALCULATING
 
 			// Double for loop to loop through all pixels in screen height/width
-			
+		for (int i = 0; i < resolution.y; i++) for(int j = 0; j < resolution.x; j++)
+		{
+		
+		}
 			// Use mapPixelToCoords to find the Vector2f coordinate in the ComplexPlane View
 
 			// Call ComplexPlane::countIteraions for Vector2f coordinate in the ComplexPlane(+store interations)
