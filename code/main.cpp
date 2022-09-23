@@ -1,7 +1,8 @@
-// Include important C++ libraries here
+// Include important C++ libraries/User defined header files here
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <complex>
+#include "ComplexPlane.h"
 
 // Make code easier to type with "using namespace"
 using namespace sf;
@@ -51,11 +52,35 @@ int main()
 		---------------------*/
 		// If the state is CALCULATING
 
+			// Double for loop to loop through all pixels in screen height/width
+			
+			// Use mapPixelToCoords to find the Vector2f coordinate in the ComplexPlane View
+
+			// Call ComplexPlane::countIteraions for Vector2f coordinate in the ComplexPlane(+store interations)
+
+			// Declare R G B as Uint8 local variables to store RGB values for current pixel
+			
+			// Pass the number of iterations and the RGB values into ComplexPlane::iterationsToRGB
+
+			// Set the color variable in the element of VertexArray that corresponds to the screen coordinate
+
+			// Set the state to DISPLAYING
+
+			// Call loadText from the ComplexPlane object
+
+		// End of for loop
+
 		/*-------------------
 		******DrawScene******
 		---------------------*/
-
+		// Clear the window
 		window.clear();
+
+		// Draw VertexArray
+
+		// Draw Text
+
+		// Display
 		window.display();
 	}
 
