@@ -1,7 +1,11 @@
+#include <SFML/Graphics.hpp>
+#include <iostream>
+#include <complex>
+#include <sstream>
 #include "ComplexPlane.h"
-#include <math.h>
 
 using namespace sf;
+using namespace std;
 
 ComplexPlane::ComplexPlane(float aspectRatio)
 {
@@ -18,24 +22,26 @@ ComplexPlane::ComplexPlane(float aspectRatio)
 
 void ComplexPlane::zoomIn()
 {
+	double tempX, tempY;
 	// Increment m_zoomCount
-	m_zoomCount += 1;
+	m_zoomCount++;
 	// Set a local variable for the x size to BASE_WIDTH * (BASE_ZOOM to the m_ZoomCount power)
-	float tempX = BASE_WIDTH * pow(BASE_ZOOM, m_zoomCount);
+	tempX = BASE_WIDTH * pow(BASE_ZOOM, m_zoomCount);
 	// Set a local variable for the y size to BASE_HEIGHT * m_aspectRatio * (BASE_ZOOM to the m_ZoomCount power)
-	float tempY = BASE_HEIGHT * m_aspectRatio * pow(BASE_ZOOM, m_zoomCount);
+	tempY = BASE_HEIGHT * m_aspectRatio * pow(BASE_ZOOM, m_zoomCount);
 	// setSize in m_view to the new size
-	m_view.setSize(tempX, tempY);
+	m_view.setSize(tempX, -tempY);
 }
 
 void ComplexPlane::zoomOut()
 {
-	// Decrement m_zoomCount
-	m_zoomCount -= 1;
+	double tempX, tempY;
+	// Increment m_zoomCount
+	m_zoomCount--;
 	// Set a local variable for the x size to BASE_WIDTH * (BASE_ZOOM to the m_ZoomCount power)
-	float tempX = BASE_WIDTH * pow(BASE_ZOOM, m_zoomCount);
+	tempX = BASE_WIDTH * pow(BASE_ZOOM, m_zoomCount);
 	// Set a local variable for the y size to BASE_HEIGHT * m_aspectRatio * (BASE_ZOOM to the m_ZoomCount power)
-	float tempY = BASE_HEIGHT * m_aspectRatio * pow(BASE_ZOOM, m_zoomCount);
+	tempY = BASE_HEIGHT * m_aspectRatio * pow(BASE_ZOOM, m_zoomCount);
 	// setSize in m_view to the new size
 	m_view.setSize(tempX, tempY);
 }
@@ -43,18 +49,23 @@ void ComplexPlane::zoomOut()
 void ComplexPlane::setCenter(Vector2f coord)
 {
 	// setCenter for m_view to the given coordinate
-	m_view.setCenter(coord.x, coord.y);
+	m_view.setCenter(coord);
+}
+
+View ComplexPlane::getView()
+{
+	// Return view
+	return m_view;
 }
 
 void ComplexPlane::setMouseLocation(Vector2f coord)
 {
 	// Store the given value in the m_mouseLocation variable
-	m_mouseLocation.x = coord.x;
-	m_mouseLocation.y = coord.y;
+	m_mouseLocation = coord;
 }
 
-//void ComplexPlane::loadText(Text& text)
-//{
+void ComplexPlane::loadText(Text& text)
+{
 	/*
 	Use a stringstream and the corresponding member variables to create the following output:
 		Mandelbrot Set
@@ -63,17 +74,66 @@ void ComplexPlane::setMouseLocation(Vector2f coord)
 		Left-click to Zoom in
 		Right-click to Zoom out
 	*/
-//}
+	string firstString = "Mandelbrot Set \n",
+		secondString = "Center: ",
+		thirdString = "Cursor: ",
+		fourthString = "Left-click to Zoom in\n",
+		fifthString = "Right-click to Zoom out\n";
 
-//size_t ComplexPlane::countIterations(Vector2f coord)
-//{
+	string displayString;
+
+	string displayCenter = "(" + to_string(m_view.getCenter().x) + ", " + to_string(m_view.getCenter().y) + ")";
+
+	string displayMouseCoordinate = "\n(" + to_string(m_mouseLocation.x) + ", " + to_string(m_mouseLocation.y) + ")";
+
+	displayString = firstString + secondString + displayCenter + thirdString + displayMouseCoordinate + fourthString + fifthString;
+
+	text.setString(displayString);
+}
+
+size_t ComplexPlane::countIterations(Vector2f coord)
+{
 	// Count the number of iterations of the set for the given coordinate as specified above
+	size_t iCount = 0;
+	complex<double> z (0, 0);
+	complex<double> c (coord.x, coord.y);
+	for (int i = 0; i <= MAX_ITER+1; i++)
+	{
+		z = z * z + c;
+		if (abs(z) <= 2.0)
+		{
+			iCount++;
+		}
+	}
+	return iCount;
+}
 
-//}
-
-//void ComplexPlane::iterationsToRGB(size_t count, Uint8& r, Uint8& g, Uint8& b)
-//{
+void ComplexPlane::iterationsToRGB(size_t count, Uint8& r, Uint8& g, Uint8& b)
+{
 	// Map the given iteration count to an r,g,b color and assign the given reference variables
-
+	if (count >= MAX_ITER)
+	{
+		r = 0,
+		g = 0,
+		b = 0;
+	}
+	else if (count < 2 && count > 10)
+	{
+		r = 25,
+		g = 25,
+		b = 25;
+	}
+	else if (count < 10 && count > 30)
+	{
+		r = 120,
+		g = 120,
+		b = 120;
+	}
+	else
+	{
+		r = 255,
+		g = 255,
+		b = 255;
+	}
 	// You may want to start with gray scale, where r,g,b are always the same value in the range [0,255]
-//}
+}
