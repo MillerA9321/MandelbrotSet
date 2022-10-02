@@ -12,12 +12,11 @@ ComplexPlane::ComplexPlane(float aspectRatio)
 	// Store the aspectRatio into m_aspectRatio
 	m_aspectRatio = aspectRatio;
 	// setSize of the m_view variable to BASE_WIDTH, -BASE_HEIGHT * m_aspectRatio
-	m_view.setSize(BASE_WIDTH, -BASE_HEIGHT * m_aspectRatio);// Negative size for the height will invert the vertical axis
+	m_view.setSize(BASE_WIDTH * m_aspectRatio, -BASE_HEIGHT);// Negative size for the height will invert the vertical axis
 	// setCenter of the m_view variable to 0.0, 0.0
 	m_view.setCenter(0.0, 0.0);
 	// Set m_zoomCount to 0
 	m_zoomCount = 0;
-
 }
 
 void ComplexPlane::zoomIn()
@@ -26,9 +25,9 @@ void ComplexPlane::zoomIn()
 	// Increment m_zoomCount
 	m_zoomCount++;
 	// Set a local variable for the x size to BASE_WIDTH * (BASE_ZOOM to the m_ZoomCount power)
-	tempX = BASE_WIDTH * pow(BASE_ZOOM, m_zoomCount);
+	tempX = BASE_WIDTH * m_aspectRatio * pow(BASE_ZOOM, m_zoomCount);
 	// Set a local variable for the y size to BASE_HEIGHT * m_aspectRatio * (BASE_ZOOM to the m_ZoomCount power)
-	tempY = BASE_HEIGHT * m_aspectRatio * pow(BASE_ZOOM, m_zoomCount);
+	tempY = BASE_HEIGHT * pow(BASE_ZOOM, m_zoomCount);
 	// setSize in m_view to the new size
 	m_view.setSize(tempX, -tempY);
 }
@@ -39,9 +38,9 @@ void ComplexPlane::zoomOut()
 	// Increment m_zoomCount
 	m_zoomCount--;
 	// Set a local variable for the x size to BASE_WIDTH * (BASE_ZOOM to the m_ZoomCount power)
-	tempX = BASE_WIDTH * pow(BASE_ZOOM, m_zoomCount);
+	tempX = BASE_WIDTH * m_aspectRatio * pow(BASE_ZOOM, m_zoomCount);
 	// Set a local variable for the y size to BASE_HEIGHT * m_aspectRatio * (BASE_ZOOM to the m_ZoomCount power)
-	tempY = BASE_HEIGHT * m_aspectRatio * pow(BASE_ZOOM, m_zoomCount);
+	tempY = BASE_HEIGHT * pow(BASE_ZOOM, m_zoomCount);
 	// setSize in m_view to the new size
 	m_view.setSize(tempX, tempY);
 }
@@ -82,9 +81,9 @@ void ComplexPlane::loadText(Text& text)
 
 	string displayString;
 
-	string displayCenter = "(" + to_string(m_view.getCenter().x) + ", " + to_string(m_view.getCenter().y) + ")";
+	string displayCenter = "(" + to_string(m_view.getCenter().x) + ", " + to_string(m_view.getCenter().y) + ")\n";
 
-	string displayMouseCoordinate = "\n(" + to_string(m_mouseLocation.x) + ", " + to_string(m_mouseLocation.y) + ")";
+	string displayMouseCoordinate = "(" + to_string(m_mouseLocation.x) + ", " + to_string(m_mouseLocation.y) + ")\n";
 
 	displayString = firstString + secondString + displayCenter + thirdString + displayMouseCoordinate + fourthString + fifthString;
 
@@ -97,7 +96,7 @@ size_t ComplexPlane::countIterations(Vector2f coord)
 	size_t iCount = 0;
 	complex<double> z (0, 0);
 	complex<double> c (coord.x, coord.y);
-	for (int i = 0; i <= MAX_ITER+1; i++)
+	for (int i = 0; i <= MAX_ITER; i++)
 	{
 		z = z * z + c;
 		if (abs(z) <= 2.0)
@@ -117,23 +116,47 @@ void ComplexPlane::iterationsToRGB(size_t count, Uint8& r, Uint8& g, Uint8& b)
 		g = 0,
 		b = 0;
 	}
-	else if (count < 2 && count > 10)
-	{
-		r = 25,
-		g = 25,
-		b = 25;
-	}
-	else if (count < 10 && count > 30)
-	{
-		r = 120,
-		g = 120,
-		b = 120;
-	}
-	else
+	else if (count <= 4)
 	{
 		r = 255,
+		g = 0,
+		b = 0;
+	}
+	else if (count <=12)
+	{
+		r = 255,
+		g = 0,
+		b = 255;
+	}
+	else if (count <= 20)
+	{
+		r = 0,
+		g = 0,
+		b = 255;
+	}
+	else if (count <= 28)
+	{
+		r = 0,
 		g = 255,
 		b = 255;
+	}
+	else if(count <= 32)
+	{
+		r = 0,
+		g = 255,
+		b = 0;
+	}
+	else if (count <= 48)
+	{
+		r = 0,
+		g = 255,
+		b = 125;
+	}
+	else if (count <= 64)
+	{
+		r = 125,
+		g = 255,
+		b = 0;
 	}
 	// You may want to start with gray scale, where r,g,b are always the same value in the range [0,255]
 }

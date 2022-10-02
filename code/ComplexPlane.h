@@ -28,7 +28,7 @@ class ComplexPlane
 };
 
 // In addition to the variables in the diagram, declare the following global constants :
-const unsigned int MAX_ITER = 64;
+const unsigned int MAX_ITER = 32;
 const float BASE_WIDTH = 4.0;
 const float BASE_HEIGHT = 4.0;
 const float BASE_ZOOM = 0.5;

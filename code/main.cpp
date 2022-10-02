@@ -36,6 +36,9 @@ int main()
 	}
 
 	Text text;
+	text.setCharacterSize(35);
+	text.setFont(font);
+	text.setPosition(12, 12);
 
 	// Construct a VertexArray, this is used for drawing each pixels color
 	VertexArray verArray;
@@ -106,35 +109,37 @@ int main()
 				for (int j = 0; j < resolution.x; j++)
 				{
 					// Use mapPixelToCoords to find the Vector2f coordinate in the ComplexPlane View
-					ComplexPlane::ComplexPlane(aspectRatio);
+					verArray[j + i * resolution.x].position = { (float)j, (float)i };
+					Vector2f pixelCoordinates = window.mapPixelToCoords(Vector2i(j, i), plane.getView());
 					// Call ComplexPlane::countIteraions for Vector2f coordinate in the ComplexPlane(+store interations)
-
+					int iterations = plane.countIterations(pixelCoordinates);
 					// Declare R G B as Uint8 local variables to store RGB values for current pixel
-
+					Uint8 r, g, b;
 					// Pass the number of iterations and the RGB values into ComplexPlane::iterationsToRGB
-
+					plane.iterationsToRGB(iterations, r, g, b);
 					// Set the color variable in the element of VertexArray that corresponds to the screen coordinate
-
-					// Set the state to DISPLAYING
-
-					// Call loadText from the ComplexPlane object
+					verArray[j + i * resolution.x].color = { r, g, b };
 				}
 			}
 			// End of for loop
-
-			/*-------------------
-			******DrawScene******
-			---------------------*/
-			// Clear the window
-			window.clear();
-
-			// Draw VertexArray
-			
-			// Draw Text
-
-			// Display
-			window.display();
 		}
+		// Set the state to DISPLAYING
+		currentState = DISPLAYING;
+		// Call loadText from the ComplexPlane object
+		plane.loadText(text);
+		
+		/*-------------------
+		******DrawScene******
+		---------------------*/
+		// Clear the window
+		window.clear();
+
+		// Draw VertexArray
+		window.draw(verArray);
+		// Draw Text
+		window.draw(text);
+		// Display
+		window.display();
 	}
 
 	return 0;
