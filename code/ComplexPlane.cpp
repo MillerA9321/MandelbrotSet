@@ -113,34 +113,66 @@ void ComplexPlane::iterationsToRGB(size_t count, Uint8& r, Uint8& g, Uint8& b)
 	if (count >= MAX_ITER)
 	{
 		r = 0,
-		g = 0,
-		b = 0;
+			g = 0,
+			b = 0;
+	}
+	else if (count <= MAX_ITER / 6.0)
+	{
+		r = 255 - (count / 6.0),
+			g = 125 - (count / 6.0),
+			b = 55 - (count / 6.0);
 	}
 	else if (count <= MAX_ITER / 5.0)
 	{
 		r = 255 - (count / 5.0),
-		g = 0,
-		b = 255 - (count /5.0);
+			g = 0,
+			b = 255 - (count / 5.0);
 	}
 	else if (count <= MAX_ITER / 4.0)
 	{
 		r = 0,
-		g = 255 - (count / 4.0),
-		b = 255 - (count / 4.0);
+			g = 255 - (count / 4.0),
+			b = 255 - (count / 4.0);
 	}
 	else if (count <= MAX_ITER / 3.0)
 	{
 		r = 0,
-		g = 255 - (count / 3.0),
-		b = 0;
+			g = 255 - (count / 3.0),
+			b = 0;
 	}
 	else if (count <= MAX_ITER / 2.0)
 	{
-		r = 255 - ( count / 2.0),
-		g = 0,
-		b = 0;
+		r = 255 - (count / 2.0),
+			g = 0,
+			b = 0;
+	}
+	else if (count <= MAX_ITER)
+	{
+		r = 255 - (count),
+			g = 255 - (count),
+			b = 0;
 	}
 	// You may want to start with gray scale, where r,g,b are always the same value in the range [0,255]
+}
 
-
+void ComplexPlane::genSet(Vector2f resolution, VertexArray* verArray, RenderWindow* window, ComplexPlane plane, int threads, int n)
+{
+	// Double for loop to loop through all pixels in screen height/width
+	for (int i = n; i < resolution.y; i += threads)
+	{
+		for (int j = 0; j < resolution.x; j++)
+		{
+			// Use mapPixelToCoords to find the Vector2f coordinate in the ComplexPlane View
+			(*verArray)[j + i * resolution.x].position = {(float)j, (float)i};
+			Vector2f pixelCoordinates = (*window).mapPixelToCoords(Vector2i(j, i), plane.getView());
+			// Call ComplexPlane::countIteraions for Vector2f coordinate in the ComplexPlane(+store interations)
+			int iterations = plane.countIterations(pixelCoordinates);
+			// Declare R G B as Uint8 local variables to store RGB values for current pixel
+			Uint8 r, g, b;
+			// Pass the number of iterations and the RGB values into ComplexPlane::iterationsToRGB
+			plane.iterationsToRGB(iterations, r, g, b);
+			// Set the color variable in the element of VertexArray that corresponds to the screen coordinate
+			(*verArray)[j + i * resolution.x].color = { r, g, b };
+		}
+	}
 }

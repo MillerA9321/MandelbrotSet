@@ -3,6 +3,7 @@
 #include <iostream>
 #include <complex>
 #include <sstream>
+#include <thread>
 #include "ComplexPlane.h"
 
 // Make code easier to type with "using namespace"
@@ -103,6 +104,18 @@ int main()
 		// If the state is CALCULATING
 		if (currentState == CALCULATING)
 		{
+
+			const int THREADS = 16;
+			thread thr[THREADS];
+			for (int i = 0; i < THREADS; i++)
+			{
+				thr[i] = thread(&ComplexPlane::genSet, plane, resolution, &verArray, &window, plane, THREADS, i);
+			}
+			for (int i = 0; i < THREADS; i++)
+			{
+				thr[i].join();
+			}
+			/*
 			// Double for loop to loop through all pixels in screen height/width
 			for (int i = 0; i < resolution.y; i++)
 			{
@@ -121,6 +134,7 @@ int main()
 					verArray[j + i * resolution.x].color = { r, g, b };
 				}
 			}
+			*/
 			// End of for loop
 			// Set the state to DISPLAYING
 			currentState = DISPLAYING;

@@ -11,7 +11,7 @@ class ComplexPlane
 		View m_view;
 		int m_zoomCount;
 		float m_aspectRatio;
-
+		
 	public:
 		ComplexPlane(float aspectRatio);
 
@@ -25,6 +25,8 @@ class ComplexPlane
 
 		static size_t countIterations(Vector2f coord);
 		static void iterationsToRGB(size_t count, Uint8& r, Uint8& g, Uint8& b);
+
+		void genSet(Vector2f resolution, VertexArray* verArray, RenderWindow* window, ComplexPlane plane, int threads, int n);
 };
 
 // In addition to the variables in the diagram, declare the following global constants :
