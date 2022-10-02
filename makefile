@@ -2,7 +2,7 @@ SRC_DIR := ./code
 OBJ_DIR := .
 SRC_FILES := $(wildcard $(SRC_DIR)/*.cpp)
 OBJ_FILES := $(patsubst $(SRC_DIR)/%.cpp,$(OBJ_DIR)/%.o,$(SRC_FILES))
-LDFLAGS := -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
+LDFLAGS := -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -lpthread
 CXXFLAGS := -g -Wall -fpermissive -std=c++17
 TARGET := MakefileTutorial.out
 
