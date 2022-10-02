@@ -105,37 +105,16 @@ int main()
 		if (currentState == CALCULATING)
 		{
 
-			const int THREADS = 16;
-			thread thr[THREADS];
-			for (int i = 0; i < THREADS; i++)
+			const int THREAD_COUNT = 16;
+			thread thr[THREAD_COUNT];
+			for (int i = 0; i < THREAD_COUNT; i++)
 			{
-				thr[i] = thread(&ComplexPlane::genSet, plane, resolution, &verArray, &window, plane, THREADS, i);
+				thr[i] = thread(&ComplexPlane::genSet, plane, resolution, &verArray, &window, plane, THREAD_COUNT, i);
 			}
-			for (int i = 0; i < THREADS; i++)
+			for (int i = 0; i < THREAD_COUNT; i++)
 			{
 				thr[i].join();
 			}
-			/*
-			// Double for loop to loop through all pixels in screen height/width
-			for (int i = 0; i < resolution.y; i++)
-			{
-				for (int j = 0; j < resolution.x; j++)
-				{
-					// Use mapPixelToCoords to find the Vector2f coordinate in the ComplexPlane View
-					verArray[j + i * resolution.x].position = { (float)j, (float)i };
-					Vector2f pixelCoordinates = window.mapPixelToCoords(Vector2i(j, i), plane.getView());
-					// Call ComplexPlane::countIteraions for Vector2f coordinate in the ComplexPlane(+store interations)
-					int iterations = plane.countIterations(pixelCoordinates);
-					// Declare R G B as Uint8 local variables to store RGB values for current pixel
-					Uint8 r, g, b;
-					// Pass the number of iterations and the RGB values into ComplexPlane::iterationsToRGB
-					plane.iterationsToRGB(iterations, r, g, b);
-					// Set the color variable in the element of VertexArray that corresponds to the screen coordinate
-					verArray[j + i * resolution.x].color = { r, g, b };
-				}
-			}
-			*/
-			// End of for loop
 			// Set the state to DISPLAYING
 			currentState = DISPLAYING;
 		}
@@ -148,7 +127,6 @@ int main()
 		---------------------*/
 		// Clear the window
 		window.clear();
-
 		// Draw VertexArray
 		window.draw(verArray);
 		// Draw Text

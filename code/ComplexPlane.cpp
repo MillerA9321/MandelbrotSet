@@ -116,12 +116,6 @@ void ComplexPlane::iterationsToRGB(size_t count, Uint8& r, Uint8& g, Uint8& b)
 			g = 0,
 			b = 0;
 	}
-	else if (count <= MAX_ITER / 6.0)
-	{
-		r = 255 - (count / 6.0),
-			g = 125 - (count / 6.0),
-			b = 55 - (count / 6.0);
-	}
 	else if (count <= MAX_ITER / 5.0)
 	{
 		r = 255 - (count / 5.0),
@@ -149,16 +143,16 @@ void ComplexPlane::iterationsToRGB(size_t count, Uint8& r, Uint8& g, Uint8& b)
 	else if (count <= MAX_ITER)
 	{
 		r = 255 - (count),
-			g = 255 - (count),
+			g = 0 ,
 			b = 0;
 	}
 	// You may want to start with gray scale, where r,g,b are always the same value in the range [0,255]
 }
 
-void ComplexPlane::genSet(Vector2f resolution, VertexArray* verArray, RenderWindow* window, ComplexPlane plane, int threads, int n)
+void ComplexPlane::genSet(Vector2f resolution, VertexArray* verArray, RenderWindow* window, ComplexPlane plane, int threadCount, int mainI)
 {
 	// Double for loop to loop through all pixels in screen height/width
-	for (int i = n; i < resolution.y; i += threads)
+	for (int i = mainI; i < resolution.y; i += threadCount)
 	{
 		for (int j = 0; j < resolution.x; j++)
 		{
