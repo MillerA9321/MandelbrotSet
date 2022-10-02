@@ -19,7 +19,7 @@ int main()
 	resolution.x = VideoMode::getDesktopMode().width;
 	resolution.y = VideoMode::getDesktopMode().height;
 
-	float aspectRatio = resolution.x/resolution.y;
+	float aspectRatio = resolution.y/resolution.x;
 
 	// Construct the window
 	VideoMode vm(resolution.x, resolution.y);
@@ -122,9 +122,10 @@ int main()
 				}
 			}
 			// End of for loop
+			// Set the state to DISPLAYING
+			currentState = DISPLAYING;
 		}
-		// Set the state to DISPLAYING
-		currentState = DISPLAYING;
+		
 		// Call loadText from the ComplexPlane object
 		plane.loadText(text);
 		
