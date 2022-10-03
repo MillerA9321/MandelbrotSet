@@ -71,17 +71,20 @@ int main()
 			// Handle Event::MouseButtonPressed for zooming in and out
 			if (handleEvent.type == Event::MouseButtonPressed)
 			{
+				// Zoom in
 				Vector2f getClickLoc = window.mapPixelToCoords(Mouse::getPosition(window), plane.getView());
 				if (handleEvent.mouseButton.button == Mouse::Left)
 				{
 					plane.zoomIn();
 					plane.setCenter(getClickLoc);
 				}
+				// Zoom out
 				if (handleEvent.mouseButton.button == Mouse::Right)
 				{
 					plane.zoomOut();
 					plane.setCenter(getClickLoc);
 				}
+				// Set current state so that it doesn't keep rendering and make the program explode
 				currentState = CALCULATING;
 			}
 			// Handle Event::MouseMoved
@@ -104,13 +107,16 @@ int main()
 		// If the state is CALCULATING
 		if (currentState == CALCULATING)
 		{
-
+			// Number of threads
 			const int THREAD_COUNT = 16;
+			// Prep the threads
 			thread thr[THREAD_COUNT];
+			// Run the program within the set number of threads using a for loop
 			for (int i = 0; i < THREAD_COUNT; i++)
 			{
 				thr[i] = thread(&ComplexPlane::genSet, plane, resolution, &verArray, &window, plane, THREAD_COUNT, i);
 			}
+			// For loop to join the work (I still only vaguely understand what this does, but it works)
 			for (int i = 0; i < THREAD_COUNT; i++)
 			{
 				thr[i].join();

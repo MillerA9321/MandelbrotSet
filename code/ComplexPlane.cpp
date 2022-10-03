@@ -116,37 +116,30 @@ void ComplexPlane::iterationsToRGB(size_t count, Uint8& r, Uint8& g, Uint8& b)
 			g = 0,
 			b = 0;
 	}
-	else if (count <= MAX_ITER / 5.0)
-	{
-		r = 255 - (count / 5.0),
-			g = 0,
-			b = 255 - (count / 5.0);
-	}
 	else if (count <= MAX_ITER / 4.0)
 	{
-		r = 0,
-			g = 255 - (count / 4.0),
-			b = 255 - (count / 4.0);
-	}
-	else if (count <= MAX_ITER / 3.0)
-	{
-		r = 0,
-			g = 255 - (count / 3.0),
-			b = 0;
+		r = count * 4,
+			g = 0,
+			b = 100 + (count * 10);
 	}
 	else if (count <= MAX_ITER / 2.0)
 	{
-		r = 255 - (count / 2.0),
-			g = 0,
+		r = 0,
+			g = 150 + (count * 10),
+			b = 255 - (count * 12);
+	}
+	else if (count <= MAX_ITER / 1.5)
+	{
+		r = count * 2,
+			g = 100 + (count * 10),
 			b = 0;
 	}
 	else if (count <= MAX_ITER)
 	{
-		r = 255 - (count),
-			g = 0 ,
-			b = 0;
+		r = 140 + (count * 10),
+			g = 10,
+			b = 10;
 	}
-	// You may want to start with gray scale, where r,g,b are always the same value in the range [0,255]
 }
 
 void ComplexPlane::genSet(Vector2f resolution, VertexArray* verArray, RenderWindow* window, ComplexPlane plane, int threadCount, int mainI)
